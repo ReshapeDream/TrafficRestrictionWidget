@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <GridLayout
+        android:id="@+id/tr_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignBounds"
+        android:clickable="true"
+        android:columnCount="3">
+
+        <TextView
+            android:id="@+id/today"
+            style="@style/common_text_style"
+            android:text="今天周四"
+            android:textColor="#900" />
+
+        <TextView
+            android:id="@+id/tomorrow"
+            style="@style/common_text_style"
+            android:text="明天周五" />
+
+        <TextView
+            android:id="@+id/third_day"
+            style="@style/common_text_style"
+            android:text="后天周六" />
+
+        <TextView
+            android:id="@+id/today_tr"
+            style="@style/common_text_style"
+            android:text="2和7"
+            android:textColor="#900" />
+
+        <TextView
+            android:id="@+id/tomorrow_tr"
+            style="@style/common_text_style"
+            android:text="3和8" />
+
+        <TextView
+            android:id="@+id/third_day_tr"
+            style="@style/common_text_style"
+            android:text="不限" />
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/tr_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="限行区域:五环(不含)内,时间:7点-20点"
+        android:textColor="#bbb"
+        android:textSize="10sp" />
+
+    <RelativeLayout
+        android:id="@+id/weather_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/pm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="空气:优 AQI:25" />
+
+        <TextView
+            android:id="@+id/update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:background="@mipmap/update"/>
+    </RelativeLayout>
+</LinearLayout>

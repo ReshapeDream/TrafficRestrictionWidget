@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">京限行</string>
+    <string name="user_tip">\n
+        本app提供北京市机动车尾号限行的提示\n
+        使用方法:\n
+        长按桌面>>添加小部件>>选择【京限行】，会在你的手机桌面自动添加一个小部件。\n
+        注意事项:\n
+        1.请确保手机联网，以便查询限行信息。\n
+        2.请根据自己的桌面壁纸颜色选择合适的主题。\n
+        3.APP提供了空气质量AQI数值，仅供参考。\n
+<!--        3.使用中如果遇到其他问题请点击下方反馈按钮，进行反馈。-->
+    </string>
+    <string name="mainActivityIntent">com.neil.trafficrestrictionwidget://MainActivity</string>
+</resources>
