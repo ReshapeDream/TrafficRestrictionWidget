@@ -3,6 +3,7 @@
     android:initialLayout="@layout/traffic"
     android:minHeight="40dp"
     android:minWidth="180dp"
-    android:updatePeriodMillis="7200000"
+    android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard"
+    android:resizeMode="horizontal"
     android:previewImage="@drawable/tr" />

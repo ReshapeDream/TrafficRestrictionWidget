@@ -1,19 +1,14 @@
 package com.neil.trafficrestrictionwidget;
 
-import android.app.Activity;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RemoteViews;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
-public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
 
     private SharedPreferences sharedPreferences;
 

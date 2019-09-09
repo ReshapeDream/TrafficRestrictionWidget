@@ -1,31 +1,23 @@
 package com.neil.trafficrestrictionwidget;
 
-import android.app.PendingIntent;
+import android.app.AlarmManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.RadioButton;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -40,10 +32,10 @@ import okhttp3.Response;
 
 public class TrafficRestrictionAppWidget extends AppWidgetProvider {
     private static final String TAG = "TRWidget";
-    //自动更新
-    private static final String action_update = "com.neil.traffic.update";
     //手动更新
     private static final String action_update_manual = "com.neil.traffic.update_manual";
+    //通过Alarm更新
+    private static final String action_update_alarm = "com.neil.traffic.update_alarm";
     //启动activity
     private static final String action_start_activity = "com.neil.traffic.startMainActivity";
     //切换深色浅色主题
@@ -51,14 +43,18 @@ public class TrafficRestrictionAppWidget extends AppWidgetProvider {
 
 
     OkHttpClient httpClient = new OkHttpClient();
-    //设置颜色
 
+    //设置颜色及图标
     int[] lightColors=new int[]{0xffff6699,0xffeeeeee,0xffdddddd,R.mipmap.update};
     int[] darkColors=new int[]{0xffff6633,0xff555555,0xff222222,R.mipmap.update_dark};
     private SharedPreferences sharedPreferences;
 
+    //模式
     private static final int STYLE_MODE_LIGHT=0;
     private static final int STYLE_MODE_DARK=1;
+
+    //首次更新后 30分钟更新一次
+    private static final int UPDATE_INTERVAL_MILLIS=30*60*1000;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -72,34 +68,32 @@ public class TrafficRestrictionAppWidget extends AppWidgetProvider {
         AppWidgetUtil.createClickBroadcast(context,action_start_activity,R.id.tr_layout,remoteViews,TrafficRestrictionAppWidget.class);
 
         appWidgetManager.updateAppWidget(appWidgetIds,remoteViews);
-        //启动service
-        context.startService(new Intent(context, UpdateService.class));
+        //
+        //发送更新Alarm
+        sendUpdateMsgDelay(context,0);
+
         setStyleMode(context);
     }
 
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-    }
 
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
         super.onRestored(context, oldWidgetIds, newWidgetIds);
+        setStyleMode(context);
     }
 
     @Override
     public void onEnabled(Context context) {
-        context.startService(new Intent(context, UpdateService.class));
         setStyleMode(context);
+        sendUpdateMsgDelay(context,0);
         super.onEnabled(context);
     }
 
     @Override
     public void onDisabled(Context context) {
-        Log.e(TAG, "onDisabled: " );
-        context.stopService(new Intent(context, UpdateService.class));
         super.onDisabled(context);
     }
+
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
@@ -109,11 +103,7 @@ public class TrafficRestrictionAppWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.e(TAG, "onReceive: "+intent.getAction() );
         switch (intent.getAction()) {
-            case action_update:
-                updateWidget(context,null);
-                break;
             case action_update_manual:
                 updateWidget(context,"更新成功");
                 break;
@@ -123,8 +113,23 @@ public class TrafficRestrictionAppWidget extends AppWidgetProvider {
             case action_change_style:
                 setStyleMode(context);
                 break;
+            case action_update_alarm:
+                updateWidget(context,null);
+                sendUpdateMsgDelay(context,UPDATE_INTERVAL_MILLIS);
+                break;
         }
     }
+
+    private void sendUpdateMsgDelay(Context context,long delayMillis){
+        AlarmManagerUtil.sendExactAlarm(context,AlarmManager.ELAPSED_REALTIME_WAKEUP,SystemClock.elapsedRealtime()+delayMillis,action_update_alarm,111,TrafficRestrictionAppWidget.class);
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        AlarmManagerUtil.cancelAlarmBroadcast(context,action_update_alarm,111,TrafficRestrictionAppWidget.class);
+        super.onDeleted(context, appWidgetIds);
+    }
+
 
 
     /**
@@ -213,8 +218,6 @@ public class TrafficRestrictionAppWidget extends AppWidgetProvider {
         remoteViews.setTextColor(R.id.pm, colors[1]);
         remoteViews.setTextColor(R.id.tr_tip,colors[2]);
         remoteViews.setInt(R.id.update,"setBackgroundResource",colors[3]);
-
         AppWidgetUtil.updateAppWidget(context,remoteViews,TrafficRestrictionAppWidget.class);
     }
-
 }

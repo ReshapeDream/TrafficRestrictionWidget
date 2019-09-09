@@ -6,20 +6,62 @@ android {
         applicationId "com.neil.trafficrestrictionwidget"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode getMyVersionCode()
+        versionName getMyVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+    //加载local.properties
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    signingConfigs {
+        neilConfig {
+            keyAlias properties.getProperty("keyAlias")
+            keyPassword properties.getProperty("keyPassword")
+            storeFile file(properties.getProperty("storeFile"))
+            storePassword properties.getProperty("storePassword")
         }
     }
 
-//    ButterKnife require java 1.8
-//    sourceCompatibility JavaVersion.VERSION_1_8
-//    targetCompatibility JavaVersion.VERSION_1_8
+    buildTypes {
+        release {
+            //是否混淆
+            minifyEnabled false
+            //混淆文件的配置
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //引用的签名文件
+            signingConfig signingConfigs.neilConfig
+            //不用生成调试包
+            debuggable false
+            //优化apk
+            zipAlignEnabled true
+        }
+    }
+
+    //修改APK的名字
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all { output ->
+                if (variant.buildType.name.equals('release')) {
+                    outputFileName = '京限行-' + getMyVersionName() + '_' + getMyVersionCode() + "-" + buildTime() + '-release.apk'
+                }
+            }
+    }
+}
+
+String getMyVersionName() {
+    return "1.0"
+}
+
+int getMyVersionCode() {
+    return 1
+}
+
+//获取时间戳
+def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
 }
 
 dependencies {

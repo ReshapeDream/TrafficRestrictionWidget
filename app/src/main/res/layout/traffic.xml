@@ -15,34 +15,28 @@
         <TextView
             android:id="@+id/today"
             style="@style/common_text_style"
-            android:text="今天周四"
             android:textColor="#900" />
 
         <TextView
             android:id="@+id/tomorrow"
-            style="@style/common_text_style"
-            android:text="明天周五" />
+            style="@style/common_text_style"/>
 
         <TextView
             android:id="@+id/third_day"
-            style="@style/common_text_style"
-            android:text="后天周六" />
+            style="@style/common_text_style"/>
 
         <TextView
             android:id="@+id/today_tr"
             style="@style/common_text_style"
-            android:text="2和7"
             android:textColor="#900" />
 
         <TextView
             android:id="@+id/tomorrow_tr"
-            style="@style/common_text_style"
-            android:text="3和8" />
+            style="@style/common_text_style"/>
 
         <TextView
             android:id="@+id/third_day_tr"
-            style="@style/common_text_style"
-            android:text="不限" />
+            style="@style/common_text_style"/>
 
     </GridLayout>
 
@@ -52,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="限行区域:五环(不含)内,时间:7点-20点"
-        android:textColor="#bbb"
+        android:textColor="#999"
         android:textSize="10sp" />
 
     <RelativeLayout
@@ -74,6 +68,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:background="@mipmap/update"/>
+            android:background="@mipmap/update_dark"/>
     </RelativeLayout>
 </LinearLayout>

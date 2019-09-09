@@ -17,7 +17,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <data android:scheme="com.neil.app"/>
             </intent-filter>
         </activity>
         <receiver android:name=".TrafficRestrictionAppWidget">
@@ -25,13 +24,12 @@
                 android:resource="@xml/traffic_restriction_app_widget"/>
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.neil.traffic.update" />
                 <action android:name="com.neil.traffic.startMainActivity" />
                 <action android:name="com.neil.traffic.update_manual" />
                 <action android:name="com.neil.traffic.changeStyleMode" />
+                <action android:name="com.neil.traffic.update_alarm" />
             </intent-filter>
         </receiver>
-        <service android:name=".UpdateService"/>
     </application>
 
 </manifest>
